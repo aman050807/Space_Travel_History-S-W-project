@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Starshine - Space Travel History</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Exo 2', sans-serif;
+            background-color: var(--space-black);
+            color: var(--space-white);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        h1, h2, h3, h4 {
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 700;
+        }
+
+        /* Transparent Navigation Bar */
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem 5%;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            transition: background-color 0.3s ease;
+        }
+
+        nav.scrolled {
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(93, 46, 140, 0.3);
+        }
+
+        .nav-left, .nav-right {
+            color: whitesmoke;
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-center {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .logo {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2rem;
+            font-weight: 900;
+            color: var(--star-yellow);
+            text-shadow: 0 0 10px rgba(255, 209, 102, 0.5);
+        }
+
+        nav a {
+            color: var(--space-white);
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        nav a:hover {
+            color: black;
+        }
+
+        /* Home Section */
+        #home {
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .video-background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: -1;
+        }
+
+        .home-content {
+            text-align: center;
+            z-index: 1;
+            padding: 0 5%;
+        }
+
+        .home-content h1 {
+            font-size: 4rem;
+            margin-bottom: 1.5rem;
+            color: whitesmoke;
+            letter-spacing: 2px;
+        }
+
+        .home-content p {
+            font-size: 1.5rem;
+            max-width: 800px;
+            margin: 0 auto;
+            color: var(--star-yellow);
+        }
+
+        /* Hero Section with Grid Timeline */
+        #hero {
+            background-image: url('components/pexels-minan1398-920534.jpg');
+            padding: 8rem 5%;
+            position: relative;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 4rem;
+            font-size: 2.5rem;
+            color: whitesmoke;
+        }
+
+        .timeline-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2.5rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .timeline-card {
+            background: rgba(54, 26, 132, 0.2);
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+            transition: all 0.4s ease;
+            position: relative;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .timeline-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4);
+            border-color: whitesmoke;
+        }
+
+        .timeline-image {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            border-bottom: 3px ;
+        }
+
+        .timeline-content {
+            padding: 1.5rem;
+            color: whitesmoke;
+        }
+
+        .timeline-year {
+            display: inline-block;
+            background-color: var(--planet-orange);
+            color: var(--space-black);
+            padding: 0.3rem 1rem;
+            border-radius: 20px;
+            font-weight: bold;
+            margin-bottom: 1rem;
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        .timeline-card h3 {
+            color: var(--star-yellow);
+            margin-bottom: 0.8rem;
+            font-size: 1.4rem;
+        }
+
+        .timeline-card p {
+            color: var(--space-white);
+            font-size: 1rem;
+            margin-bottom: 1.2rem;
+        }
+
+        .timeline-fact {
+            display: flex;
+            align-items: center;
+            background-color: rgba(6, 214, 160, 0.2);
+            padding: 0.8rem;
+            border-radius: 8px;
+            border-left: 4px solid var(--comet-teal);
+        }
+
+        .fact-icon {
+            margin-right: 0.8rem;
+            color: var(--comet-teal);
+            font-size: 1.2rem;
+        }
+
+        /* Milestones Section */
+        #milestones {
+            padding: 8rem 5%;
+            background-image: url('components/bg1.jpg');
+        }
+
+        .milestones-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .milestone-card {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: whitesmoke;
+            border-radius: 15px;
+            padding: 1.5rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            border: 2px solid transparent;
+        }
+
+        .milestone-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--star-yellow);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .milestone-card h3 {
+            color: var(--planet-orange);
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+        }
+
+        .milestone-card p {
+            color: var(--space-white);
+            margin-bottom: 1.5rem;
+        }
+
+        .milestone-secret {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(93, 46, 140, 0.95);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 1.5rem;
+            opacity: 0;
+            transform: scale(0.9);
+            transition: all 0.4s ease;
+            border-radius: 15px;
+        }
+
+        .milestone-card:hover .milestone-secret {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .milestone-secret h4 {
+            color: var(--star-yellow);
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+        }
+
+        .milestone-secret p {
+            color: var(--space-white);
+            text-align: center;
+        }
+
+        /* Gallery Section */
+        #gallery {
+            background-image: url('components/bg1.jpg');
+            padding: 8rem 5%;
+            color: whitesmoke;
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            grid-auto-rows: 200px;
+            gap: 1rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .gallery-item {
+            border-radius: 10px;
+            overflow: hidden;
+            position: relative;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .gallery-item:hover {
+            transform: scale(1.05);
+            z-index: 10;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .gallery-item:hover img {
+            transform: scale(1.1);
+        }
+
+        .gallery-item:nth-child(3n) {
+            grid-column: span 2;
+        }
+
+        .gallery-item:nth-child(5n) {
+            grid-row: span 2;
+        }
+
+        /* Journey End Section */
+        #journey-end {
+            padding: 6rem 5%;
+            text-align: center;
+            background-image: url("components/bg1.jpg");
+        }
+
+        #journey-end h2 {
+            font-size: 3rem;
+            color: whitesmoke;
+            margin-bottom: 2rem;
+        }
+
+        #journey-end p {
+            font-size: 1.5rem;
+            color: whitesmoke;
+            margin-bottom: 3rem;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .revisit-btn {
+            display: inline-block;
+            background-color:thistle;
+            padding: 1rem 2.5rem;
+            color: whitesmoke;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: bold;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(92, 22, 22, 0.3);
+        }
+
+        .revisit-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4);
+            background: rgba(92, 22, 22, 0.3);
+        }
+
+        /* Footer */
+        footer {
+            background-image: url("components/bb\.jpg");
+            padding: 4rem 5% 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .footer-clouds {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 150px;
+            background-size: cover;
+            opacity: 0.1;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            text-align: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .footer-logo {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 4rem;
+            font-weight: 900;
+            color: var(--star-yellow);
+            margin-bottom: 2rem;
+            text-shadow: 0 0 15px rgba(255, 209, 102, 0.5);
+        }
+
+        .footer-nav {
+            display: flex;
+            justify-content: center;
+            gap: 3rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-nav a {
+            color: var(--space-white);
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s ease;
+        }
+
+        .footer-nav a:hover {
+            color: var(--comet-teal);
+        }
+
+        .copyright {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.9rem;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .home-content h1 {
+                font-size: 2.5rem;
+            }
+            
+            .timeline-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .gallery-grid {
+                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            }
+            
+            .footer-nav {
+                flex-direction: column;
+                gap: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Transparent Navigation Bar -->
+    <nav id="navbar">
+
+        <div class="nav-left">
+            <a href="#home">Home</a>
+            <a href="#about">About Us</a>
+        </div>
+
+        <div class="nav-center">
+            <div class="logo">
+                <img src="components/Logo.png" alt="Starshine Logo" style="height:40px; vertical-align: middle;">
+            </div>
+        </div>
+
+        <div class="nav-right">
+            <a href="#milestones">Milestones</a>
+            <a href="#gallery">Gallery</a>
+        </div>
+
+    </nav>
+
+    <!-- Home Section -->
+    <section id="home">
+
+        <video class="video-background" autoplay muted loop>
+            <source src="https://www.pexels.com/download/video/7094565/" type="video/mp4">
+        </video>
+
+        <div class="home-content">
+            <h1>Journey Through Space Travel History</h1>
+            <p>Explore humanity's greatest adventure beyond our world</p>
+        </div>
+
+    </section>
+
+    <!-- Hero Section with Grid Timeline -->
+    <section id="hero">
+        <h2 class="section-title">The Space Exploration Timeline</h2>
+        <div class="timeline-grid">
+            <div class="timeline-card">
+                <img src="components/Sputnik-1.webp" alt="Sputnik 1" class="timeline-image">
+                <div class="timeline-content">
+                    <span class="timeline-year">1957</span>
+                    <h3>Sputnik 1</h3>
+                    <p>The world's first artificial satellite launched by the Soviet Union, marking the beginning of the space age.</p>
+                    <div class="timeline-fact">
+                        <p>Sputnik was only about the size of a beach ball but started the space race</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="timeline-card">
+                <img src="components/first_human.jpg" alt="Yuri Gagarin" class="timeline-image">
+                <div class="timeline-content">
+                    <span class="timeline-year">1961</span>
+                    <h3>First Human in Space</h3>
+                    <p>Yuri Gagarin becomes the first human to journey into outer space, completing one orbit of Earth.</p>
+                    <div class="timeline-fact">
+                        <p>Gagarin's flight lasted 108 minutes and he became an international celebrity</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="timeline-card">
+                <img src="components/apolo.jpg" alt="Moon Landing" class="timeline-image">
+                <div class="timeline-content">
+                    <span class="timeline-year">1969</span>
+                    <h3>Apollo 11 Moon Landing</h3>
+                    <p>Neil Armstrong and Buzz Aldrin become the first humans to walk on the Moon during NASA's Apollo 11 mission.</p>
+                    <div class="timeline-fact">
+                        <p>Armstrong's famous words: "That's one small step for man, one giant leap for mankind"</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="timeline-card">
+                <img src="components/station.webp" alt="Space Station" class="timeline-image">
+                <div class="timeline-content">
+                    <span class="timeline-year">1971</span>
+                    <h3>First Space Station</h3>
+                    <p>Salyut 1, the world's first space station, is launched by the Soviet Union.</p>
+                    <div class="timeline-fact">
+                        <p>Salyut 1 was only 20 meters long and weighed 18,900 kilograms</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="timeline-card">
+                <img src="components/shuttle.webp" alt="Space Shuttle" class="timeline-image">
+                <div class="timeline-content">
+                    <span class="timeline-year">1981</span>
+                    <h3>First Space Shuttle</h3>
+                    <p>Columbia becomes the first Space Shuttle to reach orbit, beginning the era of reusable spacecraft.</p>
+                    <div class="timeline-fact">
+                        <p>The Space Shuttle could carry up to 8 astronauts and 50,000 pounds of cargo</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="timeline-card">
+                <img src="components/iss.jpg" alt="ISS" class="timeline-image">
+                <div class="timeline-content">
+                    <span class="timeline-year">1998</span>
+                    <h3>International Space Station</h3>
+                    <p>The first module of the ISS is launched, beginning construction of the largest structure in space.</p>
+                    <div class="timeline-fact">
+                        <p>The ISS is the size of a football field and orbits Earth every 90 minutes</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Milestones Section -->
+    <section id="milestones">
+        <h2 class="section-title">Space Exploration Milestones</h2>
+        <div class="milestones-container">
+            <div class="milestone-card">
+                <h3>First Satellite</h3>
+                <p>Sputnik 1 launched on October 4, 1957</p>
+                <div class="milestone-secret">
+                    <h4>Secret Fact</h4>
+                    <p>Sputnik 1 was about the size of a beach ball and transmitted radio signals for 21 days before its batteries died.</p>
+                </div>
+            </div>
+            <div class="milestone-card">
+                <h3>First Animal in Space</h3>
+                <p>Laika the dog orbited Earth in 1957</p>
+                <div class="milestone-secret">
+                    <h4>Secret Fact</h4>
+                    <p>Laika was a stray dog from Moscow. Her flight proved that living organisms could survive space travel.</p>
+                </div>
+            </div>
+            <div class="milestone-card">
+                <h3>First Spacewalk</h3>
+                <p>Alexei Leonov in 1965</p>
+                <div class="milestone-secret">
+                    <h4>Secret Fact</h4>
+                    <p>Leonov's spacesuit inflated in the vacuum of space, making it difficult to re-enter the spacecraft.</p>
+                </div>
+            </div>
+            <div class="milestone-card">
+                <h3>First Moon Landing</h3>
+                <p>Apollo 11 in 1969</p>
+                <div class="milestone-secret">
+                    <h4>Secret Fact</h4>
+                    <p>The lunar module had only 20 seconds of fuel remaining when it finally touched down on the Moon's surface.</p>
+                </div>
+            </div>
+            <div class="milestone-card">
+                <h3>First Space Station</h3>
+                <p>Salyut 1 in 1971</p>
+                <div class="milestone-secret">
+                    <h4>Secret Fact</h4>
+                    <p>The first crew to board Salyut 1 died during re-entry when their Soyuz capsule depressurized.</p>
+                </div>
+            </div>
+            <div class="milestone-card">
+                <h3>First Mars Rover</h3>
+                <p>Sojourner in 1997</p>
+                <div class="milestone-secret">
+                    <h4>Secret Fact</h4>
+                    <p>Sojourner was only designed to operate for 7 days but continued working for 83 days on Mars.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Gallery Section -->
+    <section id="gallery">
+        <h2 class="section-title">Space Exploration Gallery</h2>
+        <div class="gallery-grid">
+            <div class="gallery-item">
+                <img src="https://explorer1.jpl.nasa.gov/assets/images/galleries/2017_Eclipse_GIF_dscovr-epic-21-aug-2017-solar-eclipse-shadow.gif" alt="Earth from space">
+            </div>
+            <div class="gallery-item">
+                <img src="https://cdn.mos.cms.futurecdn.net/SyEKWx7gVZRN2EQaDWwE9J-1200-80.jpg" alt="Nebula">
+            </div>
+            <div class="gallery-item">
+                <img src="https://i.natgeofe.com/k/a2a738a9-e019-4911-98e6-17f31c45ac88/milky-way-2_square.jpg" alt="Milky Way">
+            </div>
+            <div class="gallery-item">
+                <img src="https://t4.ftcdn.net/jpg/02/33/54/93/360_F_233549360_nn1v6DyMhLTid54TAVDBTiFd5HIoWOHA.jpg" alt="Space station">
+            </div>
+            <div class="gallery-item">
+                <img src="https://images.unsplash.com/photo-1446776877081-d282a0f896e2?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" alt="Astronaut">
+            </div>
+            <div class="gallery-item">
+                <img src="https://cdn.mos.cms.futurecdn.net/qTmvroik2NtHVGsfCHyyxF-1024-80.jpg" alt="Rocket launch">
+            </div>
+            <div class="gallery-item">
+                <img src="https://images.unsplash.com/photo-1464802686167-b939a6910659?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" alt="Galaxy">
+            </div>
+            <div class="gallery-item">
+                <img src="https://www.popsci.com/wp-content/uploads/2022/12/21/moon-surface-orion.jpg?quality=85" alt="Moon surface">
+            </div>
+        </div>
+    </section>
+
+    <!-- Journey End Section -->
+    <section id="journey-end">
+        <h2>Journey Ended</h2>
+        <p>Don't feel like it's ended! There's always more to explore in the vast expanse of space.</p>
+        <a href="#home" class="revisit-btn">Revisit Journey Again</a>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-clouds"></div>
+        <div class="footer-content">
+            <div class="footer-logo">
+                <img src="components/Logo.png" alt="Starshine Logo" style="height:50px; vertical-align: middle;">   
+            </div>
+            <div class="footer-nav">
+                <a href="#home">Home</a>
+                <a href="#about">About Us</a>
+                <a href="#milestones">Milestones</a>
+                <a href="#gallery">Gallery</a>
+            </div>
+            <p class="copyright">© 2023 Starshine. All rights reserved.</p>
+        </div>
+    </footer>
+</body>
+</html>
